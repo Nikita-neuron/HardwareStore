@@ -1,0 +1,247 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.0.0" author="nikita.shalov">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="birthday" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="phone" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="basket_id" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.1" author="nikita.shalov">
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="CURRENT_TIMESTAMP()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="nikita.shalov">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT"/>
+            <column name="role_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.3" author="nikita.shalov">
+        <createTable tableName="baskets">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.4" author="nikita.shalov">
+        <createTable tableName="products">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="price" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.5" author="nikita.shalov">
+        <createTable tableName="categories">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="nikita.shalov">
+        <createTable tableName="basket_product">
+            <column name="basket_id" type="BIGINT"/>
+            <column name="product_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.7" author="nikita.shalov">
+        <createTable tableName="products_categories">
+            <column name="product_id" type="BIGINT"/>
+            <column name="category_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.8" author="nikita.shalov">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_user"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+    <changeSet id="1.0.9" author="nikita.shalov">
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+
+    <changeSet id="1.0.10" author="nikita.shalov">
+        <addForeignKeyConstraint baseColumnNames="basket_id"
+                                 baseTableName="basket_product"
+                                 constraintName="fk_basket_product_basket"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="baskets"/>
+    </changeSet>
+
+    <changeSet id="1.0.11" author="nikita.shalov">
+        <addForeignKeyConstraint baseColumnNames="product_id"
+                                 baseTableName="basket_product"
+                                 constraintName="fk_basket_product_product"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="products"/>
+    </changeSet>
+
+    <changeSet id="1.0.12" author="nikita.shalov">
+        <addForeignKeyConstraint baseColumnNames="product_id"
+                                 baseTableName="products_categories"
+                                 constraintName="fk_products_categories_product"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="products"/>
+    </changeSet>
+
+    <changeSet id="1.0.13" author="nikita.shalov">
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="products_categories"
+                                 constraintName="fk_products_categories_category"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="categories"/>
+    </changeSet>
+
+    <changeSet id="1.0.14" author="nikita.shalov">
+        <addUniqueConstraint
+                columnNames="email"
+                constraintName="users_constraint_email"
+                tableName="users"/>
+    </changeSet>
+
+    <changeSet id="1.0.15" author="nikita.shalov">
+        <addUniqueConstraint
+                columnNames="title"
+                constraintName="products_constraint_title"
+                tableName="products"/>
+    </changeSet>
+
+    <changeSet id="1.0.16" author="nikita.shalov">
+        <addUniqueConstraint
+                columnNames="title"
+                constraintName="categories_constraint_title"
+                tableName="categories"/>
+    </changeSet>
+
+    <changeSet id="1.0.17" author="nikita.shalov">
+        <insert tableName="roles">
+            <column name="id" value="1"/>
+            <column name="name" value="ROLE_USER"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="id" value="2"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.18" author="nikita.shalov">
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="first_name" value="Nikita"/>
+            <column name="last_name" value="Shalov"/>
+            <column name="birthday" value="2003-08-02"/>
+            <column name="phone" value="89055366171"/>
+            <column name="email" value="nikita@gmail.com"/>
+            <column name="password" value="$2a$12$5M0aoLO/8gUunnxzZ.Wwl.Fu42V7MMRRiix0c84u2H8rMAOQqY58O"/>
+        </insert>
+
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="2"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
